@@ -62,7 +62,11 @@ function Home() {
         <div className="main-layout">
             <div className="header">
                 <h2>Բարի գալուստ, {user?.name} {user?.surname}</h2>
-                <button className="logout-btn" onClick={handleLogout}>Դուրս գալ</button>
+                <button className="logout-btn" onClick={handleLogout}>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="#f44336" strokeWidth="2">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h6a2 2 0 012 2v1" />
+                    </svg>
+                </button>
             </div>
             <div className="chat-section">
                 <div className="user-list">
@@ -101,7 +105,7 @@ function Home() {
                     {
                         messages.map((msg, idx) => (
                             <div key={idx} className={`message ${msg.userId === user.id ? "me" : "other"}`}>
-                                <strong>{msg.user}</strong>: {msg.text} <em>({msg.time})</em>
+                                <strong>{msg.user}</strong> {msg.text} <em>({msg.time})</em>
                             </div>
                         ))
                     }
@@ -112,7 +116,11 @@ function Home() {
                             onChange={(e) => setMessage(e.target.value)}
                             placeholder="Գրիր հաղորդագրություն..."
                         />
-                        <button onClick={handleSendMessage}>Ուղարկել</button>
+                        <button className="send-btn" onClick={handleSendMessage}>
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                <path d="M8 5v14l11-7z" fill="white" />
+                            </svg>
+                        </button>
                     </div>
                 </div>
             </div>
