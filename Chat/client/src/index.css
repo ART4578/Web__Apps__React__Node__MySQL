@@ -178,6 +178,8 @@ input, button {
   position: relative;
   background: white;
   font-size: 0.95rem;
+  position: relative;
+  transition: background 0.3s ease;
 }
 
 .message.me {
@@ -199,6 +201,106 @@ input, button {
   font-size: 0.75rem;
   color: gray;
   margin-top: 5px;
+}
+
+.message-options {
+  position: absolute;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  display: flex;
+  flex-direction: column;
+  padding: 6px;
+  gap: 6px;
+  z-index: 10;
+  min-width: 120px;
+  font-size: 0.85rem;
+}
+
+.message-options.me-options {
+  bottom: -100%;
+  right: 0;
+}
+
+.message-options.other-options {
+  bottom: -100%;
+  left: 0;
+}
+
+.message-options button {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  background-color: #f0f0f0;
+  transition: background 0.2s ease;
+}
+
+.message-options button.copy {
+  color: #555;
+}
+
+.message-options button.copy:hover {
+  background-color: #e0e0e0;
+}
+
+.message-options button.edit {
+  color: #007bff;
+}
+
+.message-options button.edit:hover {
+  background-color: #d0e6ff;
+}
+
+.message-options button.delete {
+  color: #d32f2f;
+}
+
+.message-options button.delete:hover {
+  background-color: #fdecea;
+}
+
+.editing-banner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #fff9e6;
+  border-left: 4px solid #ffcc00;
+  padding: 10px 15px;
+  border-radius: 10px;
+  margin-bottom: 12px;
+  font-size: 0.95rem;
+  color: #665c00;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.editing-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.editing-left svg {
+  flex-shrink: 0;
+}
+
+.cancel-edit {
+  background: none;
+  border: none;
+  color: #c62828;
+  font-weight: bold;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.cancel-edit:hover {
+  color: #b71c1c;
 }
 
 .chat-input-area {
@@ -262,6 +364,20 @@ input, button {
     flex-direction: column;
   }
 
+  .message-options.me-options,
+  .message-options.other-options {
+    top: 100%;
+    bottom: auto;
+    right: auto;
+    left: 0;
+    min-width: 100px;
+  }
+
+  .message-options button {
+    font-size: 0.8rem;
+    padding: 8px;
+  }
+
   .chat-section {
     flex-direction: column;
   }
@@ -273,5 +389,17 @@ input, button {
 
   .chat-box {
     height: 60%;
+  }
+}
+
+@media (max-width: 600px) {
+  .editing-banner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .cancel-edit {
+    align-self: flex-end;
+    margin-top: 6px;
   }
 }
