@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../../AxiosConfig/AxiosConfig";
 
 function Register() {
     const [formData, setFormData] = useState({
@@ -12,22 +12,25 @@ function Register() {
 
     const navigate = useNavigate();
     const [error, setError] = useState("");
+    const [loading, setLoading] = useState(false);
     
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-
         setError("");
+        setLoading(true);
 
-        axios.post("http://localhost:5000/api/register", formData, { withCredentials: true })
-            .then(() => navigate("/login"))
-            .catch((err) => {
-                console.error(err);
-                setError(err.response?.data?.message || "Սերվերի սխալ");
-            });
+        try {
+            await api.post("/register", formData);
+            navigate("/login");
+        } catch (err) {
+            setError(err.response?.data?.message || "Սերվերի սխալ")
+        } finally {
+            setLoading(false);
+        };
     };
 
     const handleRouter = () => navigate("/login");
@@ -36,11 +39,13 @@ function Register() {
         <div className="register-container">
             <form onSubmit={handleSubmit}>
                 <h2>Գրանցում</h2>
-                <input type="text" name="first_name" placeholder="Անուն" required onChange={handleChange} />
-                <input type="text" name="last_name" placeholder="Ազգանուն" required onChange={handleChange} />
-                <input type="email" name="email" placeholder="Էլ․ հասցե" required onChange={handleChange} />
-                <input type="password" name="password" placeholder="Գաղտնաբառ" required onChange={handleChange} />
-                <button type="submit">Գրանցվել</button>
+                <input type="text" name="first_name" placeholder="Անուն" value={formData.first_name} onChange={handleChange} required />
+                <input type="text" name="last_name" placeholder="Ազգանուն" value={formData.last_name} onChange={handleChange} required />
+                <input type="email" name="email" placeholder="Էլ․ հասցե" value={formData.email} onChange={handleChange} autoComplete="username" required />
+                <input type="password" name="password" placeholder="Գաղտնաբառ" value={formData.password} onChange={handleChange} autoComplete="new-password" required />
+                <button type="submit" disabled={loading}>
+                    {loading ? "Գրանցում..." : "Գրանցվել"}
+                </button>
                 {error && <p className="error">{error}</p>}
                 <p onClick={handleRouter} className="link">Մուտք</p>
             </form>
