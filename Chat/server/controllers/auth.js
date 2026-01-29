@@ -22,7 +22,7 @@ export const register = (req, res) => {
             if (err) return res.status(500).json({ message: "There was a problem adding the user." });
 
             const user = { id: result.insertId, name, surname, email };
-            const token = jwt.sign(user, process.env.JWT_SECRET, { expiresIn: "7d" });
+            const token = jwt.sign(user, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES });
 
             res
                 .cookie("token", token, {
@@ -64,7 +64,7 @@ export const login = (req, res) => {
             email: user.email,
         };
 
-        const token = jwt.sign(tokenPayload, process.env.JWT_SECRET, { expiresIn: "7d" });
+        const token = jwt.sign(tokenPayload, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES });
 
         res
             .cookie("token", token, {
