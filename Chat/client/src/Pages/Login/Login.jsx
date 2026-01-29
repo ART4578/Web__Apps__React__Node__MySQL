@@ -16,19 +16,19 @@ function Login() {
         axios.post("http://localhost:5000/api/auth/login", formData, { withCredentials: true })
             .then(() => navigate("/"))
             .catch(err => {
-                alert(err.response?.data?.message || "Մուտքի սխալ");
+                alert(err.response?.data?.message || "Login error.");
         });
     };
 
     return (
         <div className="page-wrapper">
-            <h2>Մուտք</h2>
+            <h2>Login</h2>
             <form onSubmit={handleSubmit} className="page-form">
-                <input name="email" type="email" placeholder="Էլ․ հասցե" onChange={handleChange} required />
-                <input name="password" type="password" placeholder="Գաղտնաբառ" onChange={handleChange} required />
-                <button type="submit">Մուտք գործել</button>
+                <input name="email" type="email" placeholder="Email" onChange={handleChange} required />
+                <input name="password" type="password" placeholder="Password" onChange={handleChange} required />
+                <button type="submit">Login</button>
             </form>
-            <p>Չունե՞ք հաշիվ։ <a href="/register">Գրանցվել</a></p>
+            <p>Don't have an account? <a href="/register">Register</a></p>
         </div>
     );
 };

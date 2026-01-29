@@ -6,20 +6,20 @@ export const register = (req, res) => {
     const { name, surname, email, password } = req.body;
 
     if (!name || !surname || !email || !password) {
-        return res.status(400).json({ message: "Խնդրում ենք լրացնել բոլոր դաշտերը" });
+        return res.status(400).json({ message: "Please fill in all fields." });
     };
 
     findUserByEmail(email, async (err, results) => {
-        if (err) return res.status(500).json({ message: "Սերվերի սխալ" });
+        if (err) return res.status(500).json({ message: "Server error." });
 
         if (results.length > 0) {
-            return res.status(409).json({ message: "Այս էլ․ հասցեն արդեն օգտագործվում է" });
+            return res.status(409).json({ message: "This email address is already in use." });
         };
 
         const hashedPassword = await bcrypt.hash(password, 10);
 
         createUser(name, surname, email, hashedPassword, (err, result) => {
-            if (err) return res.status(500).json({ message: "Օգտագործողին ավելացնելիս խնդիր եղավ" });
+            if (err) return res.status(500).json({ message: "There was a problem adding the user." });
 
             const user = { id: result.insertId, name, surname, email };
             const token = jwt.sign(user, process.env.JWT_SECRET, { expiresIn: "7d" });
@@ -31,7 +31,7 @@ export const register = (req, res) => {
                     sameSite: "Strict",
                 })
                 .status(201)
-                .json({ message: "Գրանցումը հաջողված է", user });
+                .json({ message: "Registration successful.", user });
         });
     });
 };
@@ -40,21 +40,21 @@ export const login = (req, res) => {
     const {email, password} = req.body;
     
     if (!email || !password) {
-        return res.status(400).json({ message: "Խնդրում ենք լրացնել բոլոր դաշտերը" });
+        return res.status(400).json({ message: "Please fill in all fields." });
     };
 
     findUserByEmail(email, async (err, results) => {
-        if (err) return res.status(500).json({ message: "Սերվերի սխալ" });
+        if (err) return res.status(500).json({ message: "Server error." });
 
         if (results.length === 0) {
-            return res.status(401).json({ message: "Սխալ էլ․ հասցե կամ գաղտնաբառ" });
+            return res.status(401).json({ message: "Incorrect email address or password." });
         };
 
         const user = results[0];
         const isMatch = await bcrypt.compare(password, user.password);
 
         if (!isMatch) {
-            return res.status(401).json({ message: "Սխալ էլ․ հասցե կամ գաղտնաբառ" });
+            return res.status(401).json({ message: "Incorrect email address or password." });
         };
 
         const tokenPayload = {
@@ -73,7 +73,7 @@ export const login = (req, res) => {
                 sameSite: "Strict",
             })
             .status(200)
-            .json({ message: "Մուտքը հաջողված է", user: tokenPayload });
+            .json({ message: "Login successful.", user: tokenPayload });
     });    
 };
 
@@ -90,5 +90,5 @@ export const logout = (req, res) => {
             secure: false, 
         })
         .status(200)
-        .json({ message: "Դուրս եկաք հաջողությամբ" });
+        .json({ message: "You came out successfully." });
 };

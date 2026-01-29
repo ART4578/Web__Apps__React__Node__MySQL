@@ -22,21 +22,21 @@ function Register() {
         axios.post("http://localhost:5000/api/auth/register", formData, { withCredentials: true })
             .then(() => navigate("/"))
             .catch((err) => {
-                alert(err.response?.data?.message || "Սերվերի սխալ");
+                alert(err.response?.data?.message || "Server error.");
         });
     };
 
     return (
         <div className="page-wrapper">
-            <h2>Գրանցում</h2>
+            <h2>Register</h2>
             <form onSubmit={handleSubmit} className="page-form">
-                <input name="name" type="text" placeholder="Անուն" onChange={handleChange} required />
-                <input name="surname" type="text" placeholder="Ազգանուն" onChange={handleChange} required />
-                <input name="email" type="email" placeholder="Էլ․ հասցե" onChange={handleChange} required />
-                <input name="password" type="password" placeholder="Գաղտնաբառ" onChange={handleChange} required />
-                <button type="submit">Գրանցվել</button>
+                <input name="name" type="text" placeholder="First Name" onChange={handleChange} required />
+                <input name="surname" type="text" placeholder="Last Name" onChange={handleChange} required />
+                <input name="email" type="email" placeholder="Email" onChange={handleChange} required />
+                <input name="password" type="password" placeholder="Password" onChange={handleChange} required />
+                <button type="submit">Register</button>
             </form>
-            <p>Արդեն ունե՞ք հաշիվ։ <a href="/login">Մուտք գործել</a></p>
+            <p>Do you already have an account? <a href="/login">Login</a></p>
         </div>
     );
 };

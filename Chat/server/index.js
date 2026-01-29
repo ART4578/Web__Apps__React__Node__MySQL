@@ -31,12 +31,12 @@ const userSockets = {};
 const users = new Map();
 
 io.on("connection", (socket) => {
-    console.log("Socket միացված է:", socket.id);
+    console.log("Socket is connected.", socket.id);
 
     socket.on("userConnected", (user) => {
         users.set(socket.id, user);
         userSockets[user.id] = socket.id;
-        console.log("Օգտվող միացավ:", user.name);
+        console.log("User joined.", user.name);
 
         io.emit("activeUsers", Array.from(users.values()));
     });
@@ -79,7 +79,7 @@ io.on("connection", (socket) => {
 
     socket.on("disconnect", () => {
         const user = users.get(socket.id);
-        console.log("Դուրս եկավ:", user?.name || "Անհայտ");
+        console.log("It came out.", user?.name || "Unknown.");
 
         users.delete(socket.id);
         io.emit("activeUsers", Array.from(users.values()));
@@ -93,7 +93,7 @@ io.on("connection", (socket) => {
     });
 
     socket.onAny((event, ...args) => {
-        console.log(`[${event}] ստացվեց՝`, args);
+        console.log(`[${event}] it worked՝`, args);
     });
 
     function getSocketIdByUserId(userId) {
@@ -101,6 +101,4 @@ io.on("connection", (socket) => {
     };
 });
 
-const PORT = process.env.PORT || 5000;
-
-server.listen(PORT, () => console.log("Server Started"));
+server.listen(process.env.PORT, () => console.log("Server Started"));

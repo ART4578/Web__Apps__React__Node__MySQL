@@ -55,7 +55,7 @@ function Home() {
 
     const handleSendMessage = () => {
         if (!selectedUser) {
-            alert("Նախ ընտրիր օգտվող՝ հաղորդագրություն ուղարկելու համար։");
+            alert("First, select a user to send a message to.");
             return;
         };
 
@@ -102,17 +102,17 @@ function Home() {
 
     const handleCopy = (text) => {
         if (!text) {
-            alert("Պատճենելու տեքստը բացակայում է");
+            alert("Missing text to copy.");
             return;
         };
 
         navigator.clipboard.writeText(text)
             .then(() => {
-                alert("Հաղորդագրությունը պատճենվել է");
+                alert("Message copied.");
             })
             .catch((err) => {
-                console.error("Պատճենելու սխալ:", err);
-                alert("Չհաջողվեց պատճենել հաղորդագրությունը");
+                console.error("Copy error.", err);
+                alert("Could not copy message.");
             });
 
         setHoveredMessage(null);    
@@ -126,10 +126,10 @@ function Home() {
 
     const handleDelete = (index, msg) => {
         const choice = window.prompt(
-            `Ինչպե՞ս ես ցանկանում ջնջել նամակը՝\n` +
-            `1 — Ջնջել միայն քո մոտից\n` +
-            `2 — Ջնջել բոլորի մոտից\n\n` +
-            `Մուտքագրիր 1 կամ 2`
+            `How do you want to delete the message:՝\n` +
+            `1 — Delete from you only\n` +
+            `2 — Delete from everyone\n\n` +
+            `Enter 1 or 2`
         );
 
         if (choice === "1") {
@@ -138,7 +138,7 @@ function Home() {
             socket.emit("deleteMessageForBoth", msg.id, msg.userId, msg.to);
             setMessages((prev) => prev.filter((m) => m.id !== msg.id));
         } else {
-            alert("Ջնջումը չեղարկվեց։");
+            alert("Delete canceled.");
         };
 
         setHoveredMessage(null);
@@ -147,7 +147,7 @@ function Home() {
     return (
         <div className="main-layout">
             <div className="header">
-                <h2>Բարի գալուստ, {user?.name} {user?.surname}</h2>
+                <h2>Welcome, {user?.name} {user?.surname}</h2>
                 <button className="logout-btn" onClick={handleLogout}>
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="#f44336" strokeWidth="2">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h6a2 2 0 012 2v1" />
@@ -156,7 +156,7 @@ function Home() {
             </div>
             <div className="chat-section">
                 <div className="user-list">
-                    <h3>Ակտիվ օգտվողներ</h3>
+                    <h3>Active users</h3>
                     <ul className="user-name">
                         {
                             users.map((u, idx) => (
@@ -178,12 +178,12 @@ function Home() {
                         selectedUser ? (
                             <>
                                 <h3 className="chat-partner-name">
-                                    Նամակագրություն՝ {selectedUser.name} {selectedUser.surname}
+                                    Correspondence: {selectedUser.name} {selectedUser.surname}
                                 </h3>
                             </>
                         ) : (
                             <div className="message-start">
-                                Ընտրիր օգտվող՝ նամակագրություն սկսելու համար։
+                                Select a user to start a conversation.
                             </div>
                         )
                     }
@@ -201,9 +201,9 @@ function Home() {
                                     {
                                         hoveredMessage === idx && (
                                             <div className={`message-options ${msg.userId === user.id ? "me-options" : "other-options"}`}>
-                                                <button className="copy" onClick={() => handleCopy(msg.text)}>📋 Պատճենել</button>
-                                                <button className="edit" onClick={() => handleEdit(msg)}>✏️ Փոփոխել</button>
-                                                <button className="delete" onClick={() => handleDelete(idx, msg)}>❌ Ջնջել</button>
+                                                <button className="copy" onClick={() => handleCopy(msg.text)}>📋 Copy</button>
+                                                <button className="edit" onClick={() => handleEdit(msg)}>✏️ Edit</button>
+                                                <button className="delete" onClick={() => handleDelete(idx, msg)}>❌ Delete</button>
                                             </div>
                                         )
                                     }
@@ -219,7 +219,7 @@ function Home() {
                                         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="#856404" viewBox="0 0 24 24">
                                             <path d="M4 21h17v-2H4v2zm1.94-4.06l1.06 1.06L18 7.94l-1.06-1.06L4.94 16.94zM20.71 7.04a1.003 1.003 0 0 0 0-1.42l-2.34-2.34a1.003 1.003 0 0 0-1.42 0l-1.83 1.83 3.75 3.75 1.84-1.82z"/>
                                         </svg>
-                                        <span>Փոփոխում ես նամակը</span>
+                                        <span>Are you editing the letter?</span>
                                     </div>
                                     <button className="cancel-edit" onClick={() => {
                                         setEditingMessageId(null);
@@ -231,7 +231,7 @@ function Home() {
                         <input
                             value={message}
                             onChange={(e) => setMessage(e.target.value)}
-                            placeholder="Գրիր հաղորդագրություն..."
+                            placeholder="Write a message..."
                         />
                         <button className="send-btn" onClick={handleSendMessage}>
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
