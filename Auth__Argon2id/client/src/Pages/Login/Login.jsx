@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../Api/AxiosConfig/AxiosConfig";
+import { loginValidator } from "../../Validators/authValidator";
 
 function Login() {
     const [formData, setFormData] = useState({
@@ -9,23 +10,37 @@ function Login() {
     });
 
     const navigate = useNavigate();
+    const [errors, setErrors] = useState({});
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
     
     const handleChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
+        const {name, value} = e.target;
+        setFormData((prev) => ({ ...prev, [name]: value }));
+    };
+
+    const handleBlur = (e) => {
+        const { name } = e.target;
+        setErrors((prev) => ({ ...prev, [name]: loginValidator(formData)[name] || "" }));
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setError("");
+
+        const validationErrors = loginValidator(formData);
+        setErrors(validationErrors);
+
+        if (Object.keys(validationErrors).length) return;
+
         setLoading(true);
+        setError("");
 
         try {
             await api.post("/login", {
                 email: formData.email,
                 password: formData.password
-            });      
+            });
+
             navigate("/");
         } catch (err) {
             setError(err.response?.data?.message || "Server Error");
@@ -46,18 +61,22 @@ function Login() {
                     placeholder="Email" 
                     value={formData.email} 
                     onChange={handleChange} 
+                    onBlur={handleBlur}
                     autoComplete="username" 
                     required 
                 />
+                {errors.email && <p className="error">{errors.email}</p>}
                 <input 
                     type="password" 
                     name="password" 
                     placeholder="Password" 
                     value={formData.password} 
-                    onChange={handleChange} 
+                    onChange={handleChange}
+                    onBlur={handleBlur} 
                     autoComplete="current-password" 
                     required 
                 />
+                {errors.password && <p className="error">{errors.password}</p>}
                 <button type="submit" disabled={loading}>
                     {loading ? "Downloading..." : "Login"}
                 </button>

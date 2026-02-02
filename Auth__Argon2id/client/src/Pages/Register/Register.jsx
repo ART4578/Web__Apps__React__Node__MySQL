@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../Api/AxiosConfig/AxiosConfig";
+import { registerValidator } from "../../Validators/authValidator";
 
 function Register() {
     const [formData, setFormData] = useState({
@@ -11,17 +12,30 @@ function Register() {
     });
 
     const navigate = useNavigate();
+    const [errors, setErrors] = useState({});
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
     
     const handleChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
+        const {name, value} = e.target;
+        setFormData((prev) => ({ ...prev, [name]: value }));
+    };
+
+    const handleBlur = (e) => {
+        const { name } = e.target;
+        setErrors((prev) => ({ ...prev, [name]: registerValidator(formData)[name] || "" }));
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setError("");
+
+        const validationErrors = registerValidator(formData);
+        setErrors(validationErrors);
+
+        if (Object.keys(validationErrors).length) return;
+
         setLoading(true);
+        setError("");
 
         try {
             await api.post("/register", {
@@ -30,6 +44,7 @@ function Register() {
                 email: formData.email,
                 password: formData.password
             });
+
             navigate("/login");
         } catch (err) {
             setError(err.response?.data?.message || "Server Error")
@@ -49,35 +64,43 @@ function Register() {
                     name="first_name" 
                     placeholder="First Name" 
                     value={formData.first_name} 
-                    onChange={handleChange} 
+                    onChange={handleChange}
+                    onBlur={handleBlur} 
                     required 
                 />
+                {errors.first_name && <p className="error">{errors.first_name}</p>}
                 <input 
                     type="text" 
                     name="last_name" 
                     placeholder="Last Name" 
                     value={formData.last_name} 
-                    onChange={handleChange} 
+                    onChange={handleChange}
+                    onBlur={handleBlur} 
                     required 
                 />
+                {errors.last_name && <p className="error">{errors.last_name}</p>}
                 <input 
                     type="email" 
                     name="email" 
                     placeholder="Email" 
                     value={formData.email} 
-                    onChange={handleChange} 
+                    onChange={handleChange}
+                    onBlur={handleBlur} 
                     autoComplete="username" 
                     required 
                 />
+                {errors.email && <p className="error">{errors.email}</p>}
                 <input 
                     type="password" 
                     name="password" 
                     placeholder="Password" 
                     value={formData.password} 
-                    onChange={handleChange} 
+                    onChange={handleChange}
+                    onBlur={handleBlur} 
                     autoComplete="new-password" 
                     required 
                 />
+                {errors.password && <p className="error">{errors.password}</p>}
                 <button type="submit" disabled={loading}>
                     {loading ? "Register..." : "Register"}
                 </button>
