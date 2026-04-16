@@ -5,7 +5,7 @@ function NotFound() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        document.title = "404 | Էջը չի գտնվել";
+        document.title = "404 | Page not found.";
     }, []);
 
     const handleGoHome = () => {
@@ -15,8 +15,8 @@ function NotFound() {
     return (
         <div className="notfound-container">
             <h1 className="notfound-title">404</h1>
-            <p className="notfound-text">Ձեր կողմից մուտքագրված էջը գոյություն չունի։</p>
-            <button className="notfound-btn" onClick={handleGoHome}>Վերադառնալ գլխավոր:</button>
+            <p className="notfound-text">The page you entered does not exist.</p>
+            <button className="notfound-btn" onClick={handleGoHome}>Back to main.</button>
         </div>
     );
 };

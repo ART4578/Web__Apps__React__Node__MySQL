@@ -11,7 +11,7 @@ function ProtectedRoute({ children }) {
             .catch(() => setIsAuthenticated(false));
     }, []);
 
-    if (isAuthenticated === null) return <div>Ստուգվում է...</div>;
+    if (isAuthenticated === null) return <div>Checking...</div>;
 
     return isAuthenticated ? children : <Navigate to="/login" />;
 };

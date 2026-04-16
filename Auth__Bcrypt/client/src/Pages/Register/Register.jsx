@@ -27,7 +27,7 @@ function Register() {
             await api.post("/register", formData);
             navigate("/login");
         } catch (err) {
-            setError(err.response?.data?.message || "Սերվերի սխալ")
+            setError(err.response?.data?.message || "Server error.")
         } finally {
             setLoading(false);
         };
@@ -38,16 +38,46 @@ function Register() {
     return (
         <div className="register-container">
             <form onSubmit={handleSubmit}>
-                <h2>Գրանցում</h2>
-                <input type="text" name="first_name" placeholder="Անուն" value={formData.first_name} onChange={handleChange} required />
-                <input type="text" name="last_name" placeholder="Ազգանուն" value={formData.last_name} onChange={handleChange} required />
-                <input type="email" name="email" placeholder="Էլ․ հասցե" value={formData.email} onChange={handleChange} autoComplete="username" required />
-                <input type="password" name="password" placeholder="Գաղտնաբառ" value={formData.password} onChange={handleChange} autoComplete="new-password" required />
+                <h2>Register</h2>
+                <input 
+                    type="text" 
+                    name="first_name" 
+                    placeholder="First Name" 
+                    value={formData.first_name} 
+                    onChange={handleChange} 
+                    required 
+                />
+                <input 
+                    type="text" 
+                    name="last_name" 
+                    placeholder="Last Name" 
+                    value={formData.last_name} 
+                    onChange={handleChange} 
+                    required 
+                />
+                <input 
+                    type="email" 
+                    name="email" 
+                    placeholder="Email" 
+                    value={formData.email} 
+                    onChange={handleChange} 
+                    autoComplete="username" 
+                    required 
+                />
+                <input 
+                    type="password" 
+                    name="password" 
+                    placeholder="Password" 
+                    value={formData.password} 
+                    onChange={handleChange} 
+                    autoComplete="new-password" 
+                    required 
+                />
                 <button type="submit" disabled={loading}>
-                    {loading ? "Գրանցում..." : "Գրանցվել"}
+                    {loading ? "Register..." : "Register"}
                 </button>
                 {error && <p className="error">{error}</p>}
-                <p onClick={handleRouter} className="link">Մուտք</p>
+                <p onClick={handleRouter} className="link">Login</p>
             </form>
         </div>
     );

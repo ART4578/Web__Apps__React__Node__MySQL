@@ -25,7 +25,7 @@ function Login() {
             await api.post("/login", formData);
             navigate("/");
         } catch (err) {
-            setError(err.response?.data?.message || "Սերվերի սխալ");
+            setError(err.response?.data?.message || "Server error.");
         } finally {
             setLoading(false);
         };
@@ -36,14 +36,30 @@ function Login() {
     return (
         <div className="register-container">
             <form onSubmit={handleSubmit}>
-                <h2>Մուտք</h2>
-                <input type="email" name="email" placeholder="Էլ․ հասցե" value={formData.email} onChange={handleChange} autoComplete="username" required />
-                <input type="password" name="password" placeholder="Գաղտնաբառ" value={formData.password} onChange={handleChange} autoComplete="current-password" required />
+                <h2>Login</h2>
+                <input 
+                    type="email"
+                    name="email" 
+                    placeholder="Email" 
+                    value={formData.email} 
+                    onChange={handleChange} 
+                    autoComplete="username" 
+                    required 
+                />
+                <input 
+                    type="password" 
+                    name="password" 
+                    placeholder="Password" 
+                    value={formData.password} 
+                    onChange={handleChange} 
+                    autoComplete="current-password" 
+                    required 
+                />
                 <button type="submit" disabled={loading}>
-                    {loading ? "Ներբեռնում..." : "Մուտք"}
+                    {loading ? "Downloading..." : "Login"}
                 </button>
                 {error && <p className="error">{error}</p>}
-                <p onClick={handleRouter} className="link">Գրանցվել</p>
+                <p onClick={handleRouter} className="link">Register</p>
             </form>
         </div>
     );
