@@ -17,7 +17,7 @@ const db = mysql.createPool({
     database: DB_DATABASE,
     waitForConnections: true,
     connectionLimit: 10,
-    queueLimit: 0
+    queueLimit: 100
 });
 
 const testConnection = async () => {
