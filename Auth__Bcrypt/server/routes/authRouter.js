@@ -1,6 +1,6 @@
 import express from "express";
-import { register, login, me, logout } from "../controllers/auth.js";
-import verifyToken from "../middleware/auth.js";
+import { register, login, me, logout } from "../controllers/authController.js";
+import verifyToken from "../middleware/authMiddleware.js";
 import registerLimiter from "../middleware/registerLimiter.js";
 import loginLimiter from "../middleware/loginLimiter.js";
 
