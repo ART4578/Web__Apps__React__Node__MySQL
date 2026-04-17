@@ -23,23 +23,10 @@ function Home() {
     }, []);
 
     useEffect(() => {
-        socket.on("activeUsers", (data) => {
-           setUsers(data.filter((u) => u.id !== user?.id));
-        });
-
-        socket.on("receiveMessage", (msg) => {
-            setMessages((prev) => [...prev, msg]);
-        });
-
-        socket.on("editMessage", (updatedMsg) => {
-            setMessages((prev) =>
-                prev.map((m) => (m.id === updatedMsg.id ? updatedMsg : m))
-            );
-        });
-
-        socket.on("deleteMessageForBoth", (deletedId) => {
-            setMessages((prev) => prev.filter((m) => m.id !== deletedId));
-        });
+        socket.on("activeUsers", (data) => setUsers(data.filter((u) => u.id !== user?.id)));
+        socket.on("receiveMessage", (msg) => setMessages((prev) => [...prev, msg]));
+        socket.on("editMessage", (updatedMsg) => setMessages((prev) => prev.map((m) => (m.id === updatedMsg.id ? updatedMsg : m))));
+        socket.on("deleteMessageForBoth", (deletedId) => setMessages((prev) => prev.filter((m) => m.id !== deletedId)));
 
         return () => {
             socket.off("activeUsers");
@@ -69,9 +56,7 @@ function Home() {
 
             socket.emit("editMessage", updatedMsg);
 
-            setMessages((prev) =>
-                prev.map((m) => (m.id === updatedMsg.id ? updatedMsg : m))
-            );
+            setMessages((prev) => prev.map((m) => (m.id === updatedMsg.id ? updatedMsg : m)));
 
             setEditingMessageId(null);
         } else {
@@ -103,9 +88,7 @@ function Home() {
         };
 
         navigator.clipboard.writeText(text)
-            .then(() => {
-                alert("Message copied.");
-            })
+            .then(() => alert("Message copied."))
             .catch((err) => {
                 console.error("Copy error.", err);
                 alert("Could not copy message.");

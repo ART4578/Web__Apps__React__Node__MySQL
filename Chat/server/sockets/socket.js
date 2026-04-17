@@ -9,16 +9,13 @@ const socketHandler = (io) => {
             users.set(socket.id, user);
             userSockets[user.id] = socket.id;
             console.log("User joined.", user.name);
-
             io.emit("activeUsers", Array.from(users.values()));
         });
 
         socket.on("sendMessage", (message) => {
             const toSocketId = userSockets[message.to];
 
-            if (toSocketId) {
-                io.to(toSocketId).emit("receiveMessage", message);
-            };
+            if (toSocketId) io.to(toSocketId).emit("receiveMessage", message);
 
             socket.emit("receiveMessage", message);
         });
@@ -27,26 +24,16 @@ const socketHandler = (io) => {
             const toSocketId = getSocketIdByUserId(updatedMsg.to);
             const fromSocketId = getSocketIdByUserId(updatedMsg.userId);
 
-            if (toSocketId) {
-                io.to(toSocketId).emit("editMessage", updatedMsg);
-            };
-
-            if (fromSocketId) {
-                io.to(fromSocketId).emit("editMessage", updatedMsg);
-            };
+            if (toSocketId) io.to(toSocketId).emit("editMessage", updatedMsg);
+            if (fromSocketId) io.to(fromSocketId).emit("editMessage", updatedMsg);
         });
 
         socket.on("deleteMessageForBoth", (messageId, fromId, toId) => {
             const fromSocket = userSockets[fromId];
             const toSocket = userSockets[toId];
 
-            if (fromSocket) {
-                io.to(fromSocket).emit("deleteMessageForBoth", messageId);
-            };
-
-            if (toSocket) { 
-                io.to(toSocket).emit("deleteMessageForBoth", messageId);
-            };
+            if (fromSocket) io.to(fromSocket).emit("deleteMessageForBoth", messageId);
+            if (toSocket) io.to(toSocket).emit("deleteMessageForBoth", messageId);
         });
 
         socket.on("disconnect", () => {
@@ -64,9 +51,7 @@ const socketHandler = (io) => {
             };
         });
 
-        socket.onAny((event, ...args) => {
-            console.log(`[${event}] it worked՝`, args);
-        });
+        socket.onAny((event, ...args) => console.log(`[${event}] it worked՝`, args));
 
         function getSocketIdByUserId(userId) {
             return userSockets[userId] || null;

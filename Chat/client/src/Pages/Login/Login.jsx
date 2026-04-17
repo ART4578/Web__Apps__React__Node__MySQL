@@ -6,18 +6,14 @@ function Login() {
     const [formData, setFormData] = useState({ email: "", password: "" });
     const navigate = useNavigate();
 
-    const handleChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
-    };
+    const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
 
     const handleSubmit = (e) => {
         e.preventDefault();
 
         api.post("/login", formData)
             .then(() => navigate("/"))
-            .catch(err => {
-                alert(err.response?.data?.message || "Login error.");
-        });
+            .catch((err) => alert(err.response?.data?.message || "Login error."));
     };
 
     return (

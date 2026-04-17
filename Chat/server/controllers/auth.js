@@ -5,16 +5,11 @@ import { findUserByEmail, createUser } from "../models/user.js";
 export const register = (req, res) => {
     const { name, surname, email, password } = req.body;
 
-    if (!name || !surname || !email || !password) {
-        return res.status(400).json({ message: "Please fill in all fields." });
-    };
+    if (!name || !surname || !email || !password) return res.status(400).json({ message: "Please fill in all fields." });
 
     findUserByEmail(email, async (err, results) => {
         if (err) return res.status(500).json({ message: "Server error." });
-
-        if (results.length > 0) {
-            return res.status(409).json({ message: "This email address is already in use." });
-        };
+        if (results.length > 0) return res.status(409).json({ message: "This email address is already in use." });
 
         const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -43,17 +38,12 @@ export const login = (req, res) => {
 
     findUserByEmail(email, async (err, results) => {
         if (err) return res.status(500).json({ message: "Server error." });
-
-        if (results.length === 0) {
-            return res.status(401).json({ message: "Incorrect email address or password." });
-        };
+        if (results.length === 0) return res.status(401).json({ message: "Incorrect email address or password." });
 
         const user = results[0];
         const isMatch = await bcrypt.compare(password, user.password);
 
-        if (!isMatch) {
-            return res.status(401).json({ message: "Incorrect email address or password." });
-        };
+        if (!isMatch) return res.status(401).json({ message: "Incorrect email address or password." });
 
         const tokenPayload = {
             id: user.id,

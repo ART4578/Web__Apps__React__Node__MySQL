@@ -9,21 +9,16 @@ function Register() {
         email: "",
         password: ""
     });
-
     const navigate = useNavigate();
 
-    const handleChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
-    };
+    const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
 
     const handleSubmit = (e) => {
         e.preventDefault();
 
         api.post("/register", formData)
             .then(() => navigate("/"))
-            .catch((err) => {
-                alert(err.response?.data?.message || "Server error.");
-        });
+            .catch((err) => alert(err.response?.data?.message || "Server error."));
     };
 
     return (
