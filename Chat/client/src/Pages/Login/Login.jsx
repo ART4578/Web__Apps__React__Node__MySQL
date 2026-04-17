@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../../AxiosConfig/AxiosConfig";
 
 function Login() {
     const [formData, setFormData] = useState({ email: "", password: "" });
@@ -13,7 +13,7 @@ function Login() {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        axios.post("http://localhost:5000/api/auth/login", formData, { withCredentials: true })
+        api.post("/login", formData)
             .then(() => navigate("/"))
             .catch(err => {
                 alert(err.response?.data?.message || "Login error.");

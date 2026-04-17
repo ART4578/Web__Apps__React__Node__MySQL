@@ -1,11 +1,7 @@
 import { useState, useEffect } from "react";
-import { io } from "socket.io-client";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
-
-const socket = io("http://localhost:5000", {
-    withCredentials: true
-});
+import api from "../../AxiosConfig/AxiosConfig";
+import socket from "../../SocketConfig/SocketConfig";
 
 function Home() {
     const [user, setUser] = useState(null);
@@ -18,7 +14,7 @@ function Home() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        axios.get("http://localhost:5000/api/auth/me", { withCredentials: true })
+        api.get("/me")
             .then((res) => {
                 setUser(res.data.user);
                 socket.emit("userConnected", res.data.user);
@@ -96,7 +92,7 @@ function Home() {
     };
 
     const handleLogout = () => {
-        axios.post("http://localhost:5000/api/auth/logout", {}, { withCredentials: true })
+        api.post("/logout", {})
             .then(() => navigate("/login"));
     };
 

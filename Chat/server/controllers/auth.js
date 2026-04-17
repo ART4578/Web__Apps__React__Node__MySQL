@@ -39,9 +39,7 @@ export const register = (req, res) => {
 export const login = (req, res) => {
     const {email, password} = req.body;
     
-    if (!email || !password) {
-        return res.status(400).json({ message: "Please fill in all fields." });
-    };
+    if (!email || !password) return res.status(400).json({ message: "Please fill in all fields." });
 
     findUserByEmail(email, async (err, results) => {
         if (err) return res.status(500).json({ message: "Server error." });
