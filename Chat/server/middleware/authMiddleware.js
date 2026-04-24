@@ -1,4 +1,7 @@
 import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 export const verifyToken = (req, res, next) => {
     const token = req.cookies.token;
@@ -6,7 +9,8 @@ export const verifyToken = (req, res, next) => {
     if (!token) return res.status(401).json({ message: "You do not have permission to log in." });
 
     try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const { JWT_SECRET } = process.env;
+        const decoded = jwt.verify(token, JWT_SECRET);
         req.user = decoded;
         next();
     } catch (err) {

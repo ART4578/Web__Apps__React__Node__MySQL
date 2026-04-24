@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import api from "../../AxiosConfig/AxiosConfig";
+import api from "../../Config/AxiosConfig/AxiosConfig";
 
 function Register() {
     const [formData, setFormData] = useState({

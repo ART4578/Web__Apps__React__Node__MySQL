@@ -359,6 +359,44 @@ input, button {
   fill: white;
 }
 
+.notfound-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  text-align: center;
+  padding: 20px;
+  background-color: #f8f8f8;
+}
+
+.notfound-title {
+  font-size: 100px;
+  color: #008069;
+  margin-bottom: 10px;
+}
+
+.notfound-text {
+  font-size: 20px;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.notfound-btn {
+  padding: 10px 20px;
+  background-color: #008069;
+  color: white;
+  border: none;
+  font-size: 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.notfound-btn:hover {
+  background-color: #198370;
+}
+
 @media (max-width: 768px) {
   .main-layout {
     flex-direction: column;

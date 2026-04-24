@@ -1,7 +1,7 @@
 const userSockets = {};
 const users = new Map();
 
-const socketHandler = (io) => {
+const chatSocket = (io) => {
     io.on("connection", (socket) => {
         console.log("Socket is connected.", socket.id);
 
@@ -59,4 +59,4 @@ const socketHandler = (io) => {
     });
 };
 
-export default socketHandler;
+export default chatSocket;

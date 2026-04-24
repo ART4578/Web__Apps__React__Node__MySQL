@@ -1,6 +1,9 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { findUserByEmail, createUser } from "../models/user.js";
+import dotenv from "dotenv";
+import { findUserByEmail, createUser } from "../models/userModel.js";
+
+dotenv.config();
 
 export const register = (req, res) => {
     const { name, surname, email, password } = req.body;
@@ -17,7 +20,8 @@ export const register = (req, res) => {
             if (err) return res.status(500).json({ message: "There was a problem adding the user." });
 
             const user = { id: result.insertId, name, surname, email };
-            const token = jwt.sign(user, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES });
+            const { JWT_SECRET, JWT_EXPIRES } = process.env;
+            const token = jwt.sign(user, JWT_SECRET, { expiresIn: JWT_EXPIRES });
 
             res
                 .cookie("token", token, {
@@ -52,7 +56,8 @@ export const login = (req, res) => {
             email: user.email,
         };
 
-        const token = jwt.sign(tokenPayload, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES });
+        const { JWT_SECRET, JWT_EXPIRES } = process.env;
+        const token = jwt.sign(tokenPayload, JWT_SECRET, { expiresIn: JWT_EXPIRES });
 
         res
             .cookie("token", token, {
@@ -65,7 +70,7 @@ export const login = (req, res) => {
     });    
 };
 
-export const getCurrent = (req, res) => {
+export const me = (req, res) => {
     const user = req.user;
     res.status(200).json({ user });
 };

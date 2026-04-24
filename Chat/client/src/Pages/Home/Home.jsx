@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import api from "../../AxiosConfig/AxiosConfig";
-import socket from "../../SocketConfig/SocketConfig";
+import api from "../../Config/AxiosConfig/AxiosConfig";
+import socket from "../../Config/SocketConfig/SocketConfig";
 
 function Home() {
     const [user, setUser] = useState(null);
