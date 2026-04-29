@@ -1,17 +1,5 @@
 import rateLimit from "express-rate-limit";
-
-const createLimiter = ({ windowMs, max, message }) => rateLimit({
-    windowMs,
-    max,
-    standardHeaders: true, 
-    legacyHeaders: false, 
-    handler: (req, res) => {
-        return res.status(429).json({
-            success: false,
-            message
-        });
-    }
-});
+import createLimiter from "../utils/rateLimiter.js";
 
 export const loginLimiterMiddleware = createLimiter({
     windowMs: 15 * 60 * 1000,
