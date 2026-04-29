@@ -1,11 +1,8 @@
 import { validationResult } from "express-validator";
-import { generateToken } from "../middleware/authMiddleware.js";
+import generateToken from "../utils/generateToken.js";
 import { hashPassword, verifyPassword } from "../utils/hashPassword.js";
 import { v4 as uuidv4 } from "uuid";
-import dotenv from "dotenv";
 import db from "../db.js";
-
-dotenv.config();
 
 export const register = async (req, res) => {
     try {
@@ -28,14 +25,15 @@ export const register = async (req, res) => {
         };
 
         const hashedPassword = await hashPassword(password);
+        const id = uuidv4();
 
         const [result] = await db.query(
             "INSERT INTO users (id, first_name, last_name, email, password) VALUES (?, ?, ?, ?, ?)",
-            [uuidv4(), first_name.trim(), last_name.trim(), email.trim().toLowerCase(), hashedPassword]
+            [id, first_name.trim(), last_name.trim(), email.trim().toLowerCase(), hashedPassword]
         );
 
         const user = {
-            id: result.insertId,
+            id,
             first_name,
             last_name,
             email

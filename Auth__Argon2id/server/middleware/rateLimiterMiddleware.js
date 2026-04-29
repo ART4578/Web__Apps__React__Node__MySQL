@@ -13,13 +13,13 @@ const createLimiter = ({ windowMs, max, message }) => rateLimit({
     }
 });
 
-export const loginLimiter = createLimiter({
+export const loginLimiterMiddleware = createLimiter({
     windowMs: 15 * 60 * 1000,
     max: 5,
     message: "Too many login attempts. Please try again later."
 });
 
-export const registerLimiter = createLimiter({
+export const registerLimiterMiddleware = createLimiter({
     windowMs: 60 * 60 * 1000,
     max: 3,
     message: "Too many registration attempts. Please try again later."
