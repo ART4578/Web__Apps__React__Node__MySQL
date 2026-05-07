@@ -3,6 +3,11 @@ import generateToken from "../utils/generateToken.js";
 import { hashPassword, verifyPassword } from "../utils/hashPassword.js";
 import { v4 as uuidv4 } from "uuid";
 import db from "../db.js";
+import dotenv from "dotenv";
+
+dotenv.config();
+
+const { NODE_ENV } = process.env;
 
 export const register = async (req, res) => {
     try {
@@ -44,7 +49,7 @@ export const register = async (req, res) => {
         res
             .cookie("token", token, {
                 httpOnly: true,
-                secure: false,
+                secure: NODE_ENV === "production",
                 sameSite: "Lax",
                 maxAge: 1 * 60 * 60 * 1000
             })
@@ -97,7 +102,7 @@ export const login = async (req, res) => {
         res
             .cookie("token", token, {
                 httpOnly: true,
-                secure: false,
+                secure: NODE_ENV === "production",
                 sameSite: "Lax",
                 maxAge: 1 * 60 * 60 * 1000
             })
@@ -117,7 +122,7 @@ export const logout = (req, res) => {
     res
         .clearCookie("token", {
             httpOnly: true,
-            secure: false, 
+            secure: NODE_ENV === "production", 
             sameSite: "Lax"
         })
         .status(200)

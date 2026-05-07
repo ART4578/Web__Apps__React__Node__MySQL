@@ -7,9 +7,9 @@ import { registerLimiterMiddleware, loginLimiterMiddleware } from "../middleware
 
 const router = express.Router();
 
-router.post("/register", csrfProtectionMiddleware, registerValidator, registerLimiterMiddleware, register);
-router.post("/login", csrfProtectionMiddleware, loginValidator, loginLimiterMiddleware, login);
+router.post("/register", registerLimiterMiddleware, csrfProtectionMiddleware, registerValidator, register);
+router.post("/login", loginLimiterMiddleware, csrfProtectionMiddleware, loginValidator, login);
 router.get("/me", verifyToken, me);
-router.post("/logout", csrfProtectionMiddleware, logout);
+router.post("/logout", verifyToken, csrfProtectionMiddleware, logout);
 
 export default router;

@@ -13,7 +13,11 @@ function Home() {
                 const res = await api.get("/me");
                 setUser(res.data.user);
             } catch (err) {
-                navigate("/login");
+                if (err.response?.status === 401) {
+                    navigate("/login");
+                } else {
+                    console.error("Fetch user error:", err);
+                };
             } finally {
                 setLoading(false);
             };
@@ -33,6 +37,10 @@ function Home() {
 
     if (loading) {
         return <div className="home">Loading...</div>;
+    };
+
+    if (!user) {
+        return null;
     };
 
     return (

@@ -5,7 +5,7 @@ dotenv.config();
 
 const { DB_HOST, DB_USER, DB_PASSWORD, DB_DATABASE } = process.env;
 
-if (!DB_HOST || !DB_USER || !DB_DATABASE) {
+if (!DB_HOST || !DB_USER || !DB_PASSWORD || !DB_DATABASE) {
     console.error("Database environment variables are missing");
     process.exit(1);
 };
@@ -16,8 +16,10 @@ const db = mysql.createPool({
     password: DB_PASSWORD,
     database: DB_DATABASE,
     waitForConnections: true,
-    connectionLimit: 10,
-    queueLimit: 100
+    connectionLimit: 1000,
+    queueLimit: 0,
+    enableKeepAlive: true,
+    keepAliveInitialDelay: 0
 });
 
 const testConnection = async () => {
