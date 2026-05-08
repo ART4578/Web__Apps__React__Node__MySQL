@@ -4,10 +4,18 @@ import { hashPassword, verifyPassword } from "../utils/hashPassword.js";
 import { v4 as uuidv4 } from "uuid";
 import db from "../db.js";
 import dotenv from "dotenv";
+import { findUserByEmail, createUsers } from "../models/userModel.js";
 
 dotenv.config();
 
 const { NODE_ENV } = process.env;
+
+const cookieOptions = {
+    httpOnly: true,
+    secure: NODE_ENV === "production",
+    sameSite: "Lax",
+    maxAge: 1 * 60 * 60 * 1000
+};
 
 export const register = async (req, res) => {
     try {
@@ -23,7 +31,8 @@ export const register = async (req, res) => {
             return res.status(400).json({ message: "Please fill in all fields." });
         };
 
-        const [existingUsers] = await db.query("SELECT * FROM users WHERE email = ?", [email]);
+        const normalizedEmail = email.trim().toLowerCase();
+        const existingUsers = await findUserByEmail(email);
 
         if (existingUsers.length > 0) {
             return res.status(409).json({ message: "This email address is already in use." });
@@ -32,27 +41,25 @@ export const register = async (req, res) => {
         const hashedPassword = await hashPassword(password);
         const id = uuidv4();
 
-        const [result] = await db.query(
-            "INSERT INTO users (id, first_name, last_name, email, password) VALUES (?, ?, ?, ?, ?)",
-            [id, first_name.trim(), last_name.trim(), email.trim().toLowerCase(), hashedPassword]
-        );
+        await createUsers({
+            id,
+            first_name: first_name.trim(),
+            last_name: last_name.trim(),
+            email: normalizedEmail,
+            password: hashedPassword
+        });
 
         const user = {
             id,
             first_name,
             last_name,
-            email
+            email: normalizedEmail
         };
 
         const token = generateToken(user);
 
         res
-            .cookie("token", token, {
-                httpOnly: true,
-                secure: NODE_ENV === "production",
-                sameSite: "Lax",
-                maxAge: 1 * 60 * 60 * 1000
-            })
+            .cookie("token", token, cookieOptions)
             .status(201)
             .json({ message: "Registration successful.", user });
     } catch (err) {
@@ -76,8 +83,7 @@ export const login = async (req, res) => {
         };
 
         const normalizedEmail = email.trim().toLowerCase();
-
-        const [users] = await db.query("SELECT * FROM users WHERE email = ?", [normalizedEmail]);
+        const users = await findUserByEmail(normalizedEmail);
 
         if (users.length === 0) {
             return res.status(401).json({ message: "User not found." });
@@ -100,12 +106,7 @@ export const login = async (req, res) => {
         const token = generateToken(tokenPayload);
 
         res
-            .cookie("token", token, {
-                httpOnly: true,
-                secure: NODE_ENV === "production",
-                sameSite: "Lax",
-                maxAge: 1 * 60 * 60 * 1000
-            })
+            .cookie("token", token, cookieOptions)
             .status(200)
             .json({ message: "Login successful.", user: tokenPayload });
     } catch (err) {
@@ -120,11 +121,7 @@ export const me = (req, res) => {
 
 export const logout = (req, res) => {
     res
-        .clearCookie("token", {
-            httpOnly: true,
-            secure: NODE_ENV === "production", 
-            sameSite: "Lax"
-        })
+        .clearCookie("token", cookieOptions)
         .status(200)
         .json({ message: "You came out successfully." });
 };
