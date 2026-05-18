@@ -1,0 +1,137 @@
+.container {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 30px;
+}
+
+.glass-card {
+  width: 100%;
+  max-width: 700px;
+  position: relative;
+  background: rgba(255,255,255,0.08);
+  backdrop-filter: blur(25px);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 40px;
+  padding: 60px;
+  overflow: hidden;
+  box-shadow: 0 0 60px rgba(0,0,0,0.5);
+}
+
+.top-circle{
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  background: linear-gradient(135deg, #00d4ff, #8b5cf6);
+  border-radius: 50%;
+  top: -120px;
+  right: -120px;
+  filter: blur(50px);
+  opacity: 0.5;
+}
+
+.bottom-circle {
+  position: absolute;
+  width: 250px;
+  height: 250px;
+  background: linear-gradient(135deg, #ff0080, #ff8c00);
+  border-radius: 50%;
+  bottom: -120px;
+  left: -120px;
+  filter: blur(50px);
+  opacity: 0.4;
+}
+
+h1 {
+  color: white;
+  text-align: center;
+  font-size: 55px;
+  margin-bottom: 15px;
+  position: relative;
+  z-index: 2;
+}
+
+.subtitle {
+  color: #d1d5db;
+  text-align: center;
+  margin-bottom: 40px;
+  font-size: 20px;
+  position: relative;
+  z-index: 2;
+}
+
+.input-group {
+  margin-bottom: 25px;
+  position: relative;
+  z-index: 2;
+}
+
+input,
+textarea {
+  width: 100%;
+  padding: 20px;
+  border: none;
+  outline: none;
+  border-radius: 20px;
+  background: rgba(255,255,255,0.08);
+  color: white;
+  font-size: 18px;
+  border: 1px solid rgba(255,255,255,0.1);
+  transition: 0.3s;
+}
+
+textarea {
+  min-height: 180px;
+  resize: none;
+}
+
+input:focus,
+textarea:focus {
+  border: 1px solid #00d4ff;
+  box-shadow: 0 0 20px rgba(0,212,255,0.4);
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #d1d5db;
+}
+
+button {
+  width: 100%;
+  padding: 20px;
+  border: none;
+  border-radius: 20px;
+  background: linear-gradient(135deg, #00d4ff, #8b5cf6);
+  color: white;
+  font-size: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.4s;
+  position: relative;
+  z-index: 2;
+}
+
+button:hover { 
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(0,212,255,0.5);
+}
+
+.success {
+  margin-top:25px;
+  background: #16a34a;
+  color: white;
+  padding: 15px;
+  border-radius: 15px;
+  text-align: center;
+}
+
+.error {
+  margin-top: 25px;
+  background: #dc2626;
+  color: white;
+  padding: 15px;
+  border-radius: 15px;
+  text-align: center;
+}
