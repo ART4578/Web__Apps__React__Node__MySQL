@@ -1,9 +1,7 @@
 import transporter from "../config/mailer.js";
-import dotenv from "dotenv";
+import env from "../config/env.js";
 
-dotenv.config();
-
-const { MAIL_USER, RECEIVER_MAIL } = process.env;
+const { MAIL_USER, RECEIVER_MAIL } = env;
 
 export const sendFeedback = async (req, res) => {
     try {

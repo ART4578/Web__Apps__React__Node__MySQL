@@ -1,16 +1,28 @@
 import express from "express";
 import cors from "cors";
-import dotenv from "dotenv";
+import env from "./config/env.js";
 
+import testConnection from "./database/testConnection.js";
 import booksRouter from "./routes/booksRouter.js";
 
-dotenv.config();
-
 const app = express();
+
+const { PORT } = env;
 
 app.use(express.json());
 app.use(cors());
 
 app.use("/books", booksRouter);
 
-app.listen(process.env.PORT, () => console.log("Server Started"));
+testConnection((err) => {
+    if (err) {
+        console.log("Database Error");
+        process.exit(1);
+    };
+
+    console.log("Database Ready");
+
+    app.listen(PORT, () => {
+        console.log(`Server Started on port ${PORT}`);
+    });
+});
