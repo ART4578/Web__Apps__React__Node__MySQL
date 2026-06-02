@@ -1,23 +1,23 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Register from "../Pages/Register/Register";
-import Login from "../Pages/Login/Login";
-import Home from "../Pages/Home/Home";
-import NotFound from "../Pages/NotFound/NotFound";
 import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
+import Home from "../Pages/Home";
+import Register from "../Pages/Register";
+import Login from "../Pages/Login";
+import NotFound from "../Pages/NotFound";
 
 function Router() {
     return (
         <BrowserRouter>
             <Routes>
                 <Route path="/" element={
-                    <ProtectedRoute>
-                        <Home/>
-                    </ProtectedRoute>
+                        <ProtectedRoute>
+                            <Home/>
+                        </ProtectedRoute>
                     }
                 />
-                <Route path="/login" element={<Login/>} />
-                <Route path="/register" element={<Register/>} />
-                <Route path="*" element={<NotFound/>} />
+                <Route path="/register" element={<Register/>}/>
+                <Route path="/login" element={<Login/>}/>
+                <Route path="*" element={<NotFound/>}/>
             </Routes>
         </BrowserRouter>
     );
